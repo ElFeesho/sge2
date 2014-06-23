@@ -11,6 +11,8 @@ public:
 	Entity(const string &name);
 	~Entity();
 
+	string getName();
+
 	void X(double x);
 	void Y(double y);
 	void W(double w);

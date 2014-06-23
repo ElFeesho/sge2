@@ -26,3 +26,22 @@ void InputEvents::processEvents(function<void()> quitEvent)
 		}
 	}
 }
+
+int InputEvents::mouseX()
+{
+	int x;
+	SDL_GetMouseState(&x, 0);
+	return x;
+}
+
+int InputEvents::mouseY()
+{
+	int y;
+	SDL_GetMouseState(0, &y);
+	return y;
+}
+
+int InputEvents::mouseButton()
+{
+	return SDL_GetMouseState(0, 0);
+}

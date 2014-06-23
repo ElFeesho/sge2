@@ -35,7 +35,6 @@ void ScriptEnvironment::bindClass(const string &className, map<string, lua_CFunc
 	for(auto f : functions)
 	{
 		lua_pushcfunction(state, f.second);
-		cout << "Bind " << f.first << endl;
 		lua_setfield(state, 1, f.first.c_str());
 	}
 

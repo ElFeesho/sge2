@@ -76,8 +76,36 @@ int main(int argc, char **argv)
 		}
 	};
 
-	scriptEnvironment->bindClass("Graphics", graphicsMap);
+	map<string, lua_CFunction> inputMap = { 
+		{	
+			"mouseX", 
+			[](lua_State *L) -> int 
+			{
+				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseX());
+				return 1;
+			}
+		}, 
+		{
+			"mouseY", 
+			[](lua_State *L) -> int 
+			{
 
+				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseY());
+				return 1;
+			}
+		}, 
+		{
+			"mouseButton", 
+			[](lua_State *L) -> int 
+			{
+				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseButton());
+				return 1;
+			}
+		}
+	};
+
+	scriptEnvironment->bindClass("Graphics", graphicsMap);
+	scriptEnvironment->bindClass("Input", inputMap);
 	scriptEnvironment->loadFile("main.lua");
 
 	while(!shouldQuit)

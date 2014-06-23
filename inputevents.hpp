@@ -12,6 +12,11 @@ public:
 	~InputEvents();
 
 	void processEvents(function<void()> quitEvent);
+
+	int mouseX();
+	int mouseY();
+
+	int mouseButton();
 };
 
 #endif
