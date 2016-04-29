@@ -8,10 +8,16 @@
 using std::string;
 using std::map;
 
+class Engine;
+
 class ScriptEnvironment
 {
 public:
-	ScriptEnvironment();
+    ScriptEnvironment(Engine *engine);
+    ScriptEnvironment(ScriptEnvironment&) = delete;
+    ScriptEnvironment(ScriptEnvironment&&) = delete;
+    ScriptEnvironment &operator=(ScriptEnvironment&) = delete;
+    ScriptEnvironment &operator=(ScriptEnvironment&&) = delete;
 	~ScriptEnvironment();
 
 	void bindClass(const string &className, map<string, lua_CFunction> functions);

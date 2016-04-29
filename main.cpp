@@ -15,14 +15,18 @@
 
 using namespace std;
 
+Engine &engine_from_luaState(lua_State *L)
+{
+    lua_getglobal(L, "__engine");
+    Engine *engine = reinterpret_cast<Engine*>(lua_touserdata(L, -1));
+    return *engine;
+}
 
-int main(int argc, char **argv)
+int main(int, char **)
 {
 	cout << "SGE2 Start" << endl;
 
-	Engine::getInstance();
-	
-	ScriptEnvironment *scriptEnvironment = new ScriptEnvironment();
+    Engine engine;
 
 	bool shouldQuit = false;
 	
@@ -33,16 +37,18 @@ int main(int argc, char **argv)
 	map<string, lua_CFunction> graphicsMap = { 
 		{	
 			"openScreen", 
-			[](lua_State *L) -> int 
+            [](lua_State *L) -> int
 			{
-				Engine::getInstance()->getGraphics()->openScreen(lua_tonumber(L, 1), lua_tonumber(L, 2));
+                engine_from_luaState(L).graphics().openScreen(lua_tonumber(L, 1), lua_tonumber(L, 2));
 				return 0;
 			}
 		}, 
 		{
 			"drawRect", 
-			[](lua_State *L) -> int 
+            [](lua_State *L) -> int
 			{
+                Engine &engine = engine_from_luaState(L);
+
 				int x;
 				int y;
 				int w;
@@ -53,24 +59,27 @@ int main(int argc, char **argv)
 				w = lua_tointeger(L, 3);
 				h = lua_tointeger(L, 4);
 				colour = lua_tointeger(L, 5);
-				Engine::getInstance()->getGraphics()->drawRect(x, y, w, h, colour);
+
+                engine.graphics().drawRect(x, y, w, h, colour);
 
 				return 0;
 			}
 		}, 
 		{
 			"width", 
-			[](lua_State *L) -> int 
+            [](lua_State *L) -> int
 			{
-				lua_pushnumber(L, Engine::getInstance()->getGraphics()->width());
+                Engine &engine = engine_from_luaState(L);
+                lua_pushnumber(L, engine.graphics().width());
 				return 1;
 			}
 		}, 
 		{
 			"height", 
-			[](lua_State *L) -> int 
-			{
-				lua_pushnumber(L, Engine::getInstance()->getGraphics()->height());
+            [](lua_State *L) -> int
+            {
+                Engine &engine = engine_from_luaState(L);
+                lua_pushnumber(L, engine.graphics().height());
 				return 1;
 			}
 		}
@@ -79,44 +88,44 @@ int main(int argc, char **argv)
 	map<string, lua_CFunction> inputMap = { 
 		{	
 			"mouseX", 
-			[](lua_State *L) -> int 
-			{
-				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseX());
+            [](lua_State *L) -> int
+            {
+                Engine &engine = engine_from_luaState(L);
+                lua_pushinteger(L, engine.inputEvents().mouseX());
 				return 1;
 			}
 		}, 
 		{
 			"mouseY", 
-			[](lua_State *L) -> int 
+            [](lua_State *L) -> int
 			{
-
-				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseY());
+                Engine &engine = engine_from_luaState(L);
+                lua_pushinteger(L, engine.inputEvents().mouseY());
 				return 1;
 			}
 		}, 
 		{
 			"mouseButton", 
-			[](lua_State *L) -> int 
-			{
-				lua_pushinteger(L, Engine::getInstance()->getInputEvents()->mouseButton());
+            [](lua_State *L) -> int
+            {
+                Engine &engine = engine_from_luaState(L);
+                lua_pushinteger(L, engine.inputEvents().mouseButton());
 				return 1;
 			}
 		}
 	};
 
-	scriptEnvironment->bindClass("Graphics", graphicsMap);
-	scriptEnvironment->bindClass("Input", inputMap);
-	scriptEnvironment->loadFile("main.lua");
+    ScriptEnvironment scriptEnvironment{&engine};
+    scriptEnvironment.bindClass("Graphics", graphicsMap);
+    scriptEnvironment.bindClass("Input", inputMap);
+    scriptEnvironment.loadFile("main.lua");
 
 	while(!shouldQuit)
 	{
-		scriptEnvironment->update();
-		Engine::getInstance()->getGraphics()->render();
-		Engine::getInstance()->getInputEvents()->processEvents(quitFunctor);
+        scriptEnvironment.update();
+        engine.graphics().render();
+        engine.inputEvents().processEvents(quitFunctor);
 	}
-
-	Engine::shutdown();
-	delete scriptEnvironment;
 
 	return 0;
 }

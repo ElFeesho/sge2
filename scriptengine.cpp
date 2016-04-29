@@ -6,7 +6,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-ScriptEnvironment::ScriptEnvironment()
+ScriptEnvironment::ScriptEnvironment(Engine *engine)
 {
 	state = lua_newstate([](void *ud, void *ptr, size_t osize, size_t nsize) -> void* {
 		if(ptr == 0)
@@ -18,9 +18,12 @@ ScriptEnvironment::ScriptEnvironment()
 			ptr = realloc(ptr, (osize+1) * nsize);
 		}
 		return ptr;
-	}, 0);
+    }, 0);
 
 	luaL_openlibs(state);
+
+    lua_pushlightuserdata(state, engine);
+    lua_setglobal(state, "__engine");
 }
 
 ScriptEnvironment::~ScriptEnvironment()

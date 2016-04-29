@@ -64,11 +64,13 @@ function update()
 
 	blockEntity:x(Input.mouseX()-12)
 	blockEntity:y(Input.mouseY()-12)
+
 	if(Input.mouseButton() == 1) then
 		blockEntity:colour(0xffff0088)
 	else
 		blockEntity:colour(0xffff8800)
 	end
+
 	blockEntity:draw()
 end
 

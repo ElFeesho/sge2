@@ -1,25 +1,23 @@
 #ifndef __ENGINE_HPP__
 #define __ENGINE_HPP__
 
-class Graphics;
-class InputEvents;
+#include "inputevents.hpp"
+#include "graphics.hpp"
 
 class Engine 
 {
 public:
-	static Engine *getInstance();
-	static void shutdown();
-
-	Graphics *getGraphics();
-	InputEvents *getInputEvents();
+    explicit Engine();
+    Engine(Engine&) = delete;
+    Engine(Engine&&) = delete;
+    Engine &operator=(Engine&) = delete;
+    Engine &operator=(Engine&&) = delete;
+    Graphics &graphics();
+    InputEvents &inputEvents();
 
 private:
-	Engine();
-	~Engine();
-	Graphics *graphics;
-	InputEvents *input;
-
-	static Engine *instance;
+    Graphics gfx;
+    InputEvents input;
 };
 
 #endif
