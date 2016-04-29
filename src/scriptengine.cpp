@@ -47,8 +47,7 @@ void ScriptEnvironment::bindClass(const string &className, map<string, lua_CFunc
 void ScriptEnvironment::loadFile(const string &scriptFile)
 {
 
-	int loadResult = luaL_loadfile(state, "main.lua");
-	//lua_load(state, reader, (void*)(scriptFile.c_str()), "main", 0);
+    int loadResult = luaL_loadfile(state, "main.lua");
 	
 	if(loadResult == LUA_ERRSYNTAX)
 	{
@@ -68,5 +67,5 @@ void ScriptEnvironment::loadFile(const string &scriptFile)
 void ScriptEnvironment::update()
 {
 	lua_getglobal(state, "update");
-	lua_call(state, 0, 0);
+    lua_pcall(state, 0, 0, 0);
 }

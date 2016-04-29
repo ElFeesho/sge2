@@ -50,11 +50,7 @@ int main(int, char **)
 			{
                 Engine &engine = engine_from_luaState(L);
 
-				int x;
-				int y;
-				int w;
-				int h;
-				int colour;
+                int x, y, w, h, colour;
 				x = lua_tointeger(L, 1);
 				y = lua_tointeger(L, 2);
 				w = lua_tointeger(L, 3);
