@@ -2,7 +2,7 @@ Graphics.openScreen(640, 480)
 
 dofile("entity.lua")
 
-local blockEntity = newEntity()
+local blockEntity = newEntity('block')
 blockEntity:w(25)
 blockEntity:h(25)
 blockEntity:colour(0x88ff8800)
