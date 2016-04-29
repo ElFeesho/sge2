@@ -3,7 +3,7 @@
 #include "graphics.hpp"
 #include "inputevents.hpp"
 
-Engine::Engine()
+Engine::Engine(GraphicsAdapter *gfxAdapter, InputAdapter *inputAdapter) : gfx{gfxAdapter}, input{inputAdapter}
 {
 }
 

@@ -3,7 +3,7 @@
 #include <functional>
 #include <cstdlib>
 #include <lua.hpp>
-#include <SDL/SDL.h>
+#include "sfml.hpp"
 #include <map>
 #include <fstream>
 #include <cstdio>
@@ -26,7 +26,8 @@ int main(int, char **)
 {
 	cout << "SGE2 Start" << endl;
 
-    Engine engine;
+    SFML sfml;
+    Engine engine{&sfml, &sfml};
 
 	bool shouldQuit = false;
 	

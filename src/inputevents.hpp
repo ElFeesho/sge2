@@ -1,6 +1,7 @@
 #ifndef __INPUTEVENTS_HPP__
 #define __INPUTEVENTS_HPP__
 
+#include "inputadapter.hpp"
 #include <functional>
 
 using std::function;
@@ -8,8 +9,7 @@ using std::function;
 class InputEvents
 {
 public:
-	InputEvents();
-	~InputEvents();
+    InputEvents(InputAdapter *inputAdapter);
 
 	void processEvents(function<void()> quitEvent);
 
@@ -17,6 +17,8 @@ public:
 	int mouseY();
 
 	int mouseButton();
+private:
+    InputAdapter *input;
 };
 
 #endif
