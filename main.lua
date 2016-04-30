@@ -1,59 +1,13 @@
 Graphics.openScreen(640, 480)
 
-dofile("rectdrawable.lua")
-
-function createPerpetualMover(startX, startY, xstep, ystep)
-	return {
-		_x = startX,
-		_y = startY,
-		update = function(self)
-			self._x = self._x + xstep
-			self._y = self._y + ystep
-
-			if (self._y > 480) then
-				self._y = 0
-			end
-			if (self._x > 640) then
-				self._x = 0
-			end
-		end,
-
-		x = function(self)
-			return self._x
-		end,
-
-		y = function(self)
-			return self._y
-		end
-	}
-end
-
-function createActor(actorDrawable, actorMover)
-	actor = {
-		drawable = actorDrawable,
-		mover = actorMover,
-
-		update = function(self)
-			self.mover:update()
-			self.drawable:x(self.mover:x())
-			self.drawable:y(self.mover:y())
-		end,
-
-		draw = function(self)
-			self.drawable:draw()
-		end
-	}
-	return actor
-end
+dofile("sgelib/rectdrawable.lua")
+dofile("sgelib/actor.lua")
+dofile("sgelib/perpetualmover.lua")
+dofile("sgelib/mousefollowingmover.lua")
 
 function createStar(startX, startY, depth)
-	starDrawable = newRect()
-	starDrawable:x(startX)
-	starDrawable:y(startY)
-	starDrawable:colour(0xffffffff)
-	starDrawable:w(depth)
-	starDrawable:h(depth)
-	mover = createPerpetualMover(startX, startY, 0, 0.1 * depth)	
+	starDrawable = newRect(startX, startY, depth, depth, 0xffffffff)
+	mover = createPerpetualMover(startX, startY, 0, 0.1 * depth, 640, 480)	
 	return createActor(starDrawable, mover)
 end
 
@@ -77,15 +31,13 @@ function createStarField()
 	return starField
 end
 
-local blockEntity = newRect()
-blockEntity:w(25)
-blockEntity:h(25)
-blockEntity:colour(0x88ff8800)
+function createShip()
+	return createActor(newRect(0, 0, 25, 25, 0xff0000ff), createMouseFollowingMover(12.5, 12.5))
+end
 
-local bg = newRect()
-bg:w(Graphics.width())
-bg:h(Graphics.height())
-bg:colour(0x000000ff)
+local ship = createShip()
+
+local bg = newRect(0, 0, Graphics.width(), Graphics.height(), 0x000000ff)
 
 local starField = createStarField()
 
@@ -93,16 +45,9 @@ function update()
 	bg:draw()
 
 	starField:update()
-	blockEntity:x(Input.mouseX()-12)
-	blockEntity:y(Input.mouseY()-12)
 
-	if(Input.mouseButton() == 1) then
-		blockEntity:colour(0x88ff0088)
-	else
-		blockEntity:colour(0x88ff8888)
-	end
-
-	blockEntity:draw()
+	ship:update()
+	ship:draw()
 
 end
 

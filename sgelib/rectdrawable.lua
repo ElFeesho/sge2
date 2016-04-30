@@ -1,11 +1,11 @@
-function newRect()
+function newRect(startX, startY, startW, startH, startColour)
 	
 	local rect = {
-		_x = 0,
-		_y = 0,
-		_w = 0,
-		_h = 0,
-		_colour = 0x00000000,
+		_x = startX,
+		_y = startY,
+		_w = startW,
+		_h = startH,
+		_colour = startColour,
 
 		x = function(self, newValue)
 			if (newValue ~= nil) then
