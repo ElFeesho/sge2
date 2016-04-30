@@ -1,12 +1,6 @@
-entityMap = {}
-
-function findEntityByName(name)
-	return entityMap[name]
-end
-
-function newEntity(name)
+function newRect()
 	
-	local entity = {
+	local rect = {
 		_x = 0,
 		_y = 0,
 		_w = 0,
@@ -52,8 +46,5 @@ function newEntity(name)
 			Graphics.drawRect(self._x, self._y, self._w, self._h, self._colour)
 		end
 	}
-	if (name ~= nil) then
-		entityMap[name] = entity
-	end
-	return entity
+	return rect
 end
