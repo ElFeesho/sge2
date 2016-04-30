@@ -48,16 +48,17 @@ int main(int, char **)
 			"drawRect", 
             [](lua_State *L) -> int
 			{
-                Engine &engine = engine_from_luaState(L);
+				Engine &engine = engine_from_luaState(L);
 
-                int x, y, w, h, colour;
-				x = lua_tointeger(L, 1);
-				y = lua_tointeger(L, 2);
-				w = lua_tointeger(L, 3);
-				h = lua_tointeger(L, 4);
+            double x, y, w, h;
+				int colour;
+				x = lua_tonumber(L, 1);
+				y = lua_tonumber(L, 2);
+				w = lua_tonumber(L, 3);
+				h = lua_tonumber(L, 4);
 				colour = lua_tointeger(L, 5);
 
-                engine.graphics().drawRect(x, y, w, h, colour);
+				engine.graphics().drawRect(x, y, w, h, colour);
 
 				return 0;
 			}
