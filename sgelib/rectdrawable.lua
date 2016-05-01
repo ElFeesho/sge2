@@ -1,4 +1,4 @@
-function newRect(startX, startY, startW, startH, startColour)
+function createRect(startX, startY, startW, startH, startColour)
 	
 	local rect = {
 		_x = startX,

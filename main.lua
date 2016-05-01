@@ -6,7 +6,7 @@ dofile("sgelib/perpetualmover.lua")
 dofile("sgelib/mousefollowingmover.lua")
 
 function createStar(startX, startY, depth)
-	starDrawable = newRect(startX, startY, depth, depth, 0xffffffff)
+	starDrawable = createRect(startX, startY, depth, depth, 0xffffffff)
 	mover = createPerpetualMover(startX, startY, 0, 0.1 * depth, 640, 480)	
 	return createActor(starDrawable, mover)
 end
@@ -32,13 +32,20 @@ function createStarField()
 end
 
 function createShip()
-	return createActor(newRect(0, 0, 25, 25, 0xff0000ff), createMouseFollowingMover(12.5, 12.5))
+	local shipActor = createActor(createRect(0, 0, 25, 25, 0xff0000ff), createMouseFollowingMover(12.5, 12.5))
+
+	return {
+		update = function(self)
+			shipActor:update()
+		end,
+		draw = function(self)
+			shipActor:draw()
+		end
+	}
 end
 
 local ship = createShip()
-
-local bg = newRect(0, 0, Graphics.width(), Graphics.height(), 0x000000ff)
-
+local bg = createRect(0, 0, Graphics.width(), Graphics.height(), 0x000000ff)
 local starField = createStarField()
 
 function update()
